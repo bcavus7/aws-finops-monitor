@@ -26,3 +26,19 @@ python3 finops.py
 - New AWS account has no spending history yet.
 - Budget warning threshold is currently hardcoded.
 - Cost Explorer API requests may incur charges.
+
+## Cost Trend Analysis
+Run `python cost_trends.py` to compare spending by
+AWS service across the two most recent completed months.
+
+The tool flags:
+- Spending increases of 25% or more
+- Newly appearing service costs
+
+## Testing
+Run `python -m pytest -v` to execute 8 automated tests.
+
+## Data Limitations
+The AWS account is newly created and has no historical
+spending data. Cost comparison logic has been tested
+with sample figures, not historical production bills.
