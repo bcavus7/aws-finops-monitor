@@ -1,4 +1,5 @@
 import boto3
+from budget_logic import analyze_budget
 
 account = boto3.client("sts").get_caller_identity()["Account"]
 client = boto3.client("budgets", region_name="us-east-1")
@@ -11,15 +12,14 @@ budget = client.describe_budget(
 limit = float(budget["BudgetLimit"]["Amount"])
 spent = float(budget["CalculatedSpend"]["ActualSpend"]["Amount"])
 
-remaining = limit - spent
-usage_percent = (spent / limit) * 100
+remaining, usage_percent, warning = analyze_budget(limit, spent)
 
 print(f"Monthly Budget: ${limit:.2f}")
 print(f"Actual Spending: ${spent:.2f}")
 print(f"Remaining Budget: ${remaining:.2f}")
 print(f"Budget Used: {usage_percent:.1f}%")
 
-if usage_percent >= 80:
+if warning:
     print("WARNING: Budget threshold reached!")
 else:
     print("Status: Within budget")
